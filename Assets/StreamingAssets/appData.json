@@ -1,0 +1,36 @@
+{
+  "studentsData": [
+    {
+      "firstName": "Pablo",
+      "lastName": "Correa",
+      "idCode": 0,
+      "email": "pablo@udea.com",
+      "finalNote": 5.0,
+      "isAproved": 0
+    },
+    {
+      "firstName": "chri",
+      "lastName": "gonzo",
+      "idCode": 1,
+      "email": "elchro@udea.com",
+      "finalNote": 3.0,
+      "isAproved": 0
+    },
+    {
+      "firstName": "coske",
+      "lastName": "pineda",
+      "idCode": 2,
+      "email": "coke@udea.com",
+      "finalNote": 0.0,
+      "isAproved": 0
+    },
+    {
+      "firstName": "alberto",
+      "lastName": "molina",
+      "idCode": 3,
+      "email": "albert@udea.com",
+      "finalNote": 2.9000000953674318,
+      "isAproved": 0
+    }
+  ]
+}
