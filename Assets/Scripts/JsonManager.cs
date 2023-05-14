@@ -16,9 +16,9 @@ public class JsonManager : MonoBehaviour
     [SerializeField] private TMP_InputField minPosibleNoteText;
     [SerializeField] private TMP_InputField maxPosibleNoteText;
     [SerializeField] private DragAndDropManager manager;
-    [SerializeField] private float winCondition;
-    [SerializeField] private float minPosibleNote;
-    [SerializeField] private float maxPosibleNote;
+    [SerializeField] private float m_winCondition;
+    [SerializeField] private float m_minPosibleNote;
+    [SerializeField] private float m_maxPosibleNote;
     public List<StudentsData> m_studentsData = new List<StudentsData>();
     [SerializeField] private List<StudentFields> m_fields = new List<StudentFields>();
     [SerializeField] private List<StudentsData> wrongRating = new List<StudentsData>();
@@ -46,6 +46,9 @@ public class JsonManager : MonoBehaviour
             string content = File.ReadAllText(savedFile);
             jsonData = JsonUtility.FromJson<JsonData>(content);
 
+            m_minPosibleNote = jsonData.minPosibleNote;
+            m_maxPosibleNote = jsonData.maxPosibleNote;
+            m_winCondition = jsonData.winCondition;
             m_studentsData = jsonData.studentsData;
 
             AssignFields();
@@ -56,6 +59,9 @@ public class JsonManager : MonoBehaviour
         {
             JsonData newData = new JsonData()
             {
+                minPosibleNote = m_minPosibleNote,
+                maxPosibleNote = m_maxPosibleNote,
+                winCondition = m_winCondition,
                 studentsData = new List<StudentsData>()
             };
 
@@ -70,6 +76,9 @@ public class JsonManager : MonoBehaviour
     {
         jsonData = new JsonData()
         {
+            minPosibleNote = m_minPosibleNote,
+            maxPosibleNote = m_maxPosibleNote,
+            winCondition = m_winCondition,
             studentsData = m_studentsData
         };
 
@@ -88,7 +97,7 @@ public class JsonManager : MonoBehaviour
             for (int i = 0; i < m_studentsData.Count; i++)
             {
                 AddToStudentsData(i);
-                if (m_studentsData[i].finalNote < winCondition && m_studentsData[i].isAproved == 1 || m_studentsData[i].finalNote >= winCondition && m_studentsData[i].isAproved == 2 || m_studentsData[i].isAproved == 0)
+                if (m_studentsData[i].finalNote < m_winCondition && m_studentsData[i].isAproved == 1 || m_studentsData[i].finalNote >= m_winCondition && m_studentsData[i].isAproved == 2 || m_studentsData[i].isAproved == 0)
                 {
                     warningText.text = $"{warningText.text}{m_studentsData[i].firstName} {m_studentsData[i].lastName}\n";
                     wrongRating.Add(m_studentsData[i]);
@@ -133,9 +142,9 @@ public class JsonManager : MonoBehaviour
 
     public void OpenChangeNoteFormat()
     {
-        winConditionText.text = $"{winCondition}";
-        maxPosibleNoteText.text = $"{maxPosibleNote}";
-        minPosibleNoteText.text = $"{minPosibleNote}";
+        winConditionText.text = $"{m_winCondition}";
+        maxPosibleNoteText.text = $"{m_maxPosibleNote}";
+        minPosibleNoteText.text = $"{m_minPosibleNote}";
 
         for (int i = 0; i < m_studentsData.Count; i++)
         {
@@ -147,19 +156,19 @@ public class JsonManager : MonoBehaviour
     {
         for (int i = 0; i < m_studentsData.Count; i++)
         {
-            float notePercentage = ((m_studentsData[i].finalNote * 100) / maxPosibleNote);
+            float notePercentage = ((m_studentsData[i].finalNote * 100) / m_maxPosibleNote);
             m_studentsData[i].finalNote = (int.Parse(maxPosibleNoteText.text) * notePercentage) / 100;
             AddToFields(i);
         }
 
-        winCondition = int.Parse(winConditionText.text);
-        maxPosibleNote = int.Parse(maxPosibleNoteText.text);
-        minPosibleNote = int.Parse(minPosibleNoteText.text);
+        m_winCondition = int.Parse(winConditionText.text);
+        m_maxPosibleNote = int.Parse(maxPosibleNoteText.text);
+        m_minPosibleNote = int.Parse(minPosibleNoteText.text);
     }
 
     public void AdaptWinCondition()
     {
-        float winPercentage = (int.Parse(winConditionText.text) * 100) / maxPosibleNote;
+        float winPercentage = (int.Parse(winConditionText.text) * 100) / m_maxPosibleNote;
         int maxNote = int.Parse(maxPosibleNoteText.text);
         winConditionText.text = $"{(maxNote * winPercentage) / 100}";
     }
@@ -255,6 +264,9 @@ public class JsonManager : MonoBehaviour
 [System.Serializable]
 public class JsonData
 {
+    public float minPosibleNote = 0;
+    public float maxPosibleNote = 5;
+    public float winCondition = 3;
     public List<StudentsData> studentsData;
 }
 
